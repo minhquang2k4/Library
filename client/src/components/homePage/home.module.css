@@ -1,0 +1,16 @@
+.books {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1rem;
+}
+
+.book {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 30px;
+  background-color: antiquewhite;
+  border-radius: 10px;
+  padding: 5px;
+}

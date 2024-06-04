@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="welcome">
+      <h1></h1>
+      <a href="http://localhost:3000/login">Đăng nhâp</a>
+    </div>
+    <main>
+      <div class="addProduct">
+        <h1>them san pham</h1>
+        <input type="text" id="name" placeholder="name" name="name" />
+        <input type="text" id="price" placeholder="price" name="price" />
+        <input
+          type="text"
+          id="description"
+          placeholder="description"
+          name="description"
+        />
+        <button id="add">Add Product</button>
+      </div>
+
+      <div class="display">
+        <h1>San pham cua ban</h1>
+        <div id="listProduct"></div>
+      </div>
+
+    </main>
+    <script>
+      function getCookie(name) {
+        var cookieArr = document.cookie.split(";");
+
+        for (var i = 0; i < cookieArr.length; i++) {
+          var cookiePair = cookieArr[i].split("=");
+
+          if (name == cookiePair[0].trim()) {
+            return decodeURIComponent(cookiePair[1]);
+          }
+        }
+        return null;
+      }
+
+      var token = getCookie("token");
+
+      if (token) {
+        const welcome = document.getElementById("welcome");
+        welcome.querySelector("h1").textContent =
+          "Chao mung ban den voi trang web";
+        document.querySelector("main").style.display = "block";
+        welcome.querySelector("a").style.display = "none";
+      } else {
+        const welcome = document.getElementById("welcome");
+        welcome.querySelector("h1").textContent =
+          "Ban chua dang nhap, vui long dang nhap de tiep tuc";
+        document.querySelector("main").style.display = "none";
+        welcome.querySelector("a").style.display = "block";
+      }
+
+      //   display
+      function displayProduct() {
+        fetch("http://localhost:3000/product/index")
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+            const listProduct = document.getElementById("listProduct");
+            listProduct.innerHTML = "";
+            data.forEach((product) => {
+                const productElement = document.createElement("div");
+                productElement.innerHTML = `
+                    <a href="http://localhost:3000/detail/${product.id}">
+                        <h3>${product.name}</h3>
+                        <p>${product.price}</p>
+                        <p>${product.description}</p>
+                    </a>
+                `;
+                listProduct.appendChild(productElement);
+            });
+          });
+      }
+        displayProduct();
+
+      document.getElementById("add").addEventListener("click", function () {
+        const name = document.getElementById("name").value;
+        const price = document.getElementById("price").value;
+        const description = document.getElementById("description").value;
+
+        fetch("http://localhost:3000/product", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            name,
+            price,
+            description,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            displayProduct();
+          });
+      });
+
+    </script>
+    <!-- <script src="/src/public/script.js"></script> -->
+  </body>
+</html>

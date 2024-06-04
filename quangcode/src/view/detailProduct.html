@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Chi tiet san pham</h1>
+    <div id="detailProduct">
+        <h2>Product Name: <span id="name"></span></h2>
+        <h2>Product Price: <span id="price"></span></h2>
+        <h2>Product Description: <span id="description"></span></h2>
+    </div>
+    <button id="delete">Delete</button>
+    <button id="update">Update</button>
+    <script>
+        function getCookie(name) {
+            var cookieArr = document.cookie.split(";");
+            for (var i = 0; i < cookieArr.length; i++) {
+                var cookiePair = cookieArr[i].split("=");
+                if (name == cookiePair[0].trim()) {
+                    return decodeURIComponent(cookiePair[1]);
+                }
+            }
+            return null;
+        }
+        var token = getCookie("token");
+        if (token) {
+            const welcome = document.getElementById("welcome");
+            welcome.querySelector("h1").textContent = "Chao mung ban den voi trang web";
+            document.querySelector("main").style.display = "block";
+            welcome.querySelector("a").style.display = "none";
+        } else {
+            const welcome = document.getElementById("welcome");
+            welcome.querySelector("h1").textContent = "Ban chua dang nhap, vui long dang nhap de tiep tuc";
+            document.querySelector("main").style.display = "none";
+            welcome.querySelector("a").style.display = "block";
+        }
+    </script>
+</body>
+</html>
