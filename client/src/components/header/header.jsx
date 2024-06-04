@@ -1,15 +1,29 @@
-import { Link } from "react-router-dom";
-import { Dropdown, Menu } from "semantic-ui-react";
-
-import React from "react";
+import React, { useState, useEffect } from "react";
 import style from "./header.module.css";
-
-const options = [
-  { key: 1, text: "Login", value: "login", as: Link, to: "/login" },
-  { key: 2, text: "Register", value: "register", as: Link, to: "/register" },
-];
+import { Link, } from "react-router-dom";
+import { Dropdown, Menu } from "semantic-ui-react";
+import axios from "axios";
 
 const Header = () => {
+  const options = [
+    { key: 1, text: "Login", value: "login", as: Link, to: "/login" },
+    { key: 2, text: "Register", value: "register", as: Link, to: "/register" },
+  ];
+
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // axios.get('http://localhost:8000/api/check-login')
+    //   .then(res => {
+    //     if (res.data.user) {
+    //       setUser(res.data.user);
+    //     }
+    //   })
+    //   .catch (err => {
+    //     console.log(err);
+    //   });
+  }, []);
+
   return (
     <header>
       <div className={style.nav}>
@@ -24,14 +38,18 @@ const Header = () => {
             Test
           </Menu.Item>
           <Menu.Item as={Link} to="/test">
-            Test
+            Mượn sách
           </Menu.Item>
           <Menu.Item as={Link} to="/test">
-            Test
+            Trả sách
           </Menu.Item>
         </Menu>
         <Menu compact>
-          <Dropdown text="Chưa có tài khoản?" options={options} simple item />
+        {user ? (
+            <Menu.Item>{user.username}</Menu.Item>
+          ) : (
+            <Dropdown text="Chưa có tài khoản?" options={options} simple item />
+          )}
         </Menu>
       </div>
     </header>
