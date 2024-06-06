@@ -12,4 +12,4 @@ router.get('/api/check-login', auth.checkLogin);
 router.post('/register', auth.register);
 router.post('/login', auth.login);
 
-module.exports = router;cd
+module.exports = router;

@@ -1,54 +1,68 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import style from "./header.module.css";
-import { Link, } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Dropdown, Menu } from "semantic-ui-react";
-import axios from "axios";
 
 const Header = () => {
-  const options = [
-    { key: 1, text: "Login", value: "login", as: Link, to: "/login" },
-    { key: 2, text: "Register", value: "register", as: Link, to: "/register" },
-  ];
+  const username = localStorage.getItem("username");
 
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    // axios.get('http://localhost:8000/api/check-login')
-    //   .then(res => {
-    //     if (res.data.user) {
-    //       setUser(res.data.user);
-    //     }
-    //   })
-    //   .catch (err => {
-    //     console.log(err);
-    //   });
-  }, []);
+  const handleLogout = () => {
+    localStorage.removeItem("username");
+    document.cookie =
+      "token" + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.href = "/login";
+  };
 
   return (
     <header>
       <div className={style.nav}>
-        <h1 className={style.logo}>
-          <i className="large book icon"></i>
-        </h1>
+        <i className="huge book icon"></i>
         <Menu>
           <Menu.Item as={Link} to="/">
             Home
           </Menu.Item>
-          <Menu.Item as={Link} to="/test">
-            Test
+          <Menu.Item as={Link} to="/yourbooks">
+            Sách đã mượn
           </Menu.Item>
-          <Menu.Item as={Link} to="/test">
-            Mượn sách
-          </Menu.Item>
-          <Menu.Item as={Link} to="/test">
-            Trả sách
+          <Menu.Item as={Link} to="/thongke">
+            Thống kê
           </Menu.Item>
         </Menu>
         <Menu compact>
-        {user ? (
-            <Menu.Item>{user.username}</Menu.Item>
+          {username ? (
+            <Dropdown
+              text={username}
+              options={[{ key: 1, text: "Logout", value: "logout" }]}
+              simple
+              item
+              onChange={(e, { value }) => {
+                if (value === "logout") {
+                  handleLogout();
+                }
+              }}
+            />
           ) : (
-            <Dropdown text="Chưa có tài khoản?" options={options} simple item />
+            <Dropdown
+              text="Tài khoản"
+              options={[
+                {
+                  key: 1,
+                  text: "Login",
+                  value: "login",
+                  as: Link,
+                  to: "/login",
+                },
+                {
+                  key: 2,
+                  text: "Register",
+                  value: "register",
+                  as: Link,
+                  to: "/register",
+                },
+              ]}
+              simple
+              item
+            />
           )}
         </Menu>
       </div>

@@ -8,7 +8,7 @@ module.exports.register = async (req, res) => {
   const password = req.body.password;
 
   if (await User.findOne({ username: username })) {
-    res.redirect("/register");
+    res.status(409).json({ message: "Username already exists" });
     return;
   }
 
@@ -20,7 +20,7 @@ module.exports.register = async (req, res) => {
   });
 
   await user.save();
-  res.redirect("/login");
+  res.status(201).json({ message: "User created successfully"});
 };
 
 module.exports.login = async (req, res) => {
@@ -35,7 +35,7 @@ module.exports.login = async (req, res) => {
     return;
   }
   res.cookie("token", user.token);
-  res.json({ user: user });
+  res.json({ success: true, user: user});
 };
 
 module.exports.checkLogin = async (req, res) => {

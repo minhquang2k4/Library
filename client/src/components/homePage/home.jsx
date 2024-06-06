@@ -3,53 +3,32 @@ import style from "./home.module.css";
 const Home = () => {
   const books = [
     {
-      title: "Book 1",
-      author: "Author 1",
-      isbn: "ISBN1",
-      publicationDate: "2022-01-01",
-      genre: "Fiction",
+      title: "Đắc Nhân Tâm",
+      author: "Dale Carnegie",
+      description: "Cuốn sách này chia sẻ về cách xây dựng mối quan hệ tốt với người khác, cải thiện kỹ năng giao tiếp và tạo ra sự ảnh hưởng tích cực trong cuộc sống.",
+      image: "https://cungdocsach.vn/wp-content/uploads/2020/10/%C4%90%E1%BA%AFc-nh%C3%A2n-t%C3%A2m-3.jpg",
+      type: "Phát triển cá nhân, Kỹ năng sống",
     },
     {
-      title: "Book 2",
-      author: "Author 2",
-      isbn: "ISBN2",
-      publicationDate: "2022-02-01",
-      genre: "Non-Fiction",
+      title: "Đắc Nhân Tâm",
+      author: "Dale Carnegie",
+      description: "Cuốn sách này chia sẻ về cách xây dựng mối quan hệ tốt với người khác, cải thiện kỹ năng giao tiếp và tạo ra sự ảnh hưởng tích cực trong cuộc sống.",
+      image: "https://salt.tikicdn.com/cache/750x750/ts/product/6a/da/bb/185d27fe442a1668cf0196c1b82c87eb.jpg.webp",
+      type: "Phát triển cá nhân, Kỹ năng sống",
     },
     {
-      title: "Book 3",
-      author: "Author 3",
-      isbn: "ISBN3",
-      publicationDate: "2022-03-01",
-      genre: "Science",
+      title: "Đắc Nhân Tâm",
+      author: "Dale Carnegie",
+      description: "Cuốn sách này chia sẻ về cách xây dựng mối quan hệ tốt với người khác, cải thiện kỹ năng giao tiếp và tạo ra sự ảnh hưởng tích cực trong cuộc sống.",
+      image: "https://th.bing.com/th/id/OIP.StLSQH6KLcCz0FTmvzGs9AHaEm?rs=1&pid=ImgDetMain",
+      type: "Phát triển cá nhân, Kỹ năng sống",
     },
     {
-      title: "Book 3",
-      author: "Author 3",
-      isbn: "ISBN3",
-      publicationDate: "2022-03-01",
-      genre: "Science",
-    },
-    {
-      title: "Book 3",
-      author: "Author 3",
-      isbn: "ISBN3",
-      publicationDate: "2022-03-01",
-      genre: "Science",
-    },
-    {
-      title: "Book 3",
-      author: "Author 3",
-      isbn: "ISBN3",
-      publicationDate: "2022-03-01",
-      genre: "Science",
-    },
-    {
-      title: "Book 3",
-      author: "Author 3",
-      isbn: "ISBN3",
-      publicationDate: "2022-03-01",
-      genre: "Science",
+      title: "Đắc Nhân Tâm",
+      author: "Dale Carnegie",
+      description: "Cuốn sách này chia sẻ về cách xây dựng mối quan hệ tốt với người khác, cải thiện kỹ năng giao tiếp và tạo ra sự ảnh hưởng tích cực trong cuộc sống. ",
+      image: "https://th.bing.com/th/id/OIP.StLSQH6KLcCz0FTmvzGs9AHaEm?rs=1&pid=ImgDetMain",
+      type: "Phát triển cá nhân, Kỹ năng sống",
     },
   ];
 
@@ -59,11 +38,13 @@ const Home = () => {
       <div className={style.books}>
         {books.map((book, index) => (
           <div className={style.book} key={index}>
-            <h2>{book.title}</h2>
-            <p>{book.author}</p>
-            <p>{book.isbn}</p>
-            <p>{book.publicationDate}</p>
-            <p>{book.genre}</p>
+            <img src={book.image} alt={book.title} />
+            <div>
+              <h2>{book.title}</h2>
+              <h3>{book.author}</h3>
+              <p><b>Mô tả: </b>{book.description}</p>
+              <p><b>Thể loại: </b>{book.type}</p>
+            </div>
           </div>
         ))}
       </div>
