@@ -38,12 +38,3 @@ module.exports.login = async (req, res) => {
   res.json({ success: true, user: user});
 };
 
-module.exports.checkLogin = async (req, res) => {
-  const token = req.cookies.token;
-  const user = await User.findOne({ token: token });
-  if (!user) {
-    res.json({ user: null });
-    return;
-  }
-  res.json({ user: user });
-};

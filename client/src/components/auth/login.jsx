@@ -1,6 +1,10 @@
+import { useContext } from "react";
+import { authContext } from "../isLogin/isLogin.jsx";
 import styles from "./login.module.css";
 
-const Register = () => {
+const Login = () => {
+  const [ auth,setAuth ] = useContext(authContext);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -18,7 +22,8 @@ const Register = () => {
 
       const data = await response.json();
       if (data.user) {
-        localStorage.setItem('username', data.user.username); 
+        setAuth(true); 
+        localStorage.setItem('username', data.user.username);
         window.location.href = "/";
       } else {
         alert("Invalid email or password.");
@@ -47,4 +52,4 @@ const Register = () => {
     </div>
   );
 };
-export default Register;
+export default Login;

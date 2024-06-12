@@ -22,5 +22,5 @@ app.use(cookieParser());
 app.use(require("./routers/router.js"));
 
 app.listen(port, () => {
-  console.log(`Server is running on port 8000`);
+  console.log(`Server is running on port ${port}`);
 });

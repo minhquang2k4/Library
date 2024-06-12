@@ -18,14 +18,6 @@ const userSchema = new schema({
     type: String,
     required: true,
   },
-  books: {
-    type: [
-      {
-        type: schema.Types.ObjectId,
-        ref: "Book",
-      },
-    ],
-  },
 });
 
 const User = mongoose.model("User", userSchema);
