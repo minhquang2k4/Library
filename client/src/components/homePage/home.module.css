@@ -3,7 +3,7 @@
 }
 
 .add{
-  margin-left: 25px !important; 
+  margin-left: 30px !important; 
   padding-left: 10px !important;
   padding-right: 10px !important;
 }
@@ -81,3 +81,18 @@ form {
   margin: 25px;
 }
 
+.header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.filter {
+  display: flex;
+  margin-right: 30px;
+  gap: 30px;
+}
+
+.export{
+  margin-left: 30px !important;
+}

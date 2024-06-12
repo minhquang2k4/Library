@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Form, Input, TextArea, Select, Button } from 'semantic-ui-react';
+import { Form, Input, TextArea, Select, Button, Dropdown } from 'semantic-ui-react';
+// import XLSX from 'xlsx';
 import { authContext } from "../isLogin/isLogin.jsx";
 import style from "./home.module.css";
 
@@ -16,22 +17,20 @@ const Home = () => {
     { key: '2', text: 'văn học', value: 'văn học' },
   ]
 
-  const [auth, setAuth] = useContext(authContext);
+  const [auth] = useContext(authContext);
 
   // api get
   const [books, setBooks] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [filterType, setFilterType] = useState('none');
+  const [filterGenre, setFilterGenre] = useState('none');
 
   useEffect(() => {
-    if (loading) {
-      fetch('http://localhost:8000/api/home')
-        .then((res) => res.json())
-        .then((data) => {
-          setBooks(data);
-          setLoading(false);
-        });
-    }
-  }, [loading]);
+    fetch(`http://localhost:8000/api/home?type=${filterType}&genre=${filterGenre}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setBooks(data);
+      });
+  }, [filterType, filterGenre]);
 
   const [showForm, setShowForm] = useState(false);
   const handleForm = () => {
@@ -74,7 +73,6 @@ const Home = () => {
       })
       .then((newBook) => {
         setBooks([...books, newBook]);
-        setLoading(true);
         console.log('Success:', newBook);
       })
       .catch((err) => {
@@ -91,37 +89,83 @@ const Home = () => {
   };
 
   // api delete
-  // const deleteBook = (id) => {
-  //   if(!auth) {
-  //     alert("Bạn cần đăng nhập để xóa sách");
-  //     window.location.href = "/login";
-  //     return;
-  //   }
-  //   fetch(`http://localhost:8000/api/home/${id}`, {
-  //     method: 'DELETE',
-  //   })
-  //     .then((res) => {
-  //       if (!res.ok) {
-  //         throw new Error('Network response was not ok');
-  //       }
-  //       return res.json();
-  //     })
-  //     .then(() => {
-  //       setBooks(books.filter((book) => book._id !== id));
-  //       console.log('Success:', books);
-  //     })
-  //     .catch((err) => {
-  //       console.log('Error:', err);
-  //     });
-  //   };
+  const deleteBook = (id) => {
+    if (!auth) {
+      alert("Bạn cần đăng nhập để xóa sách");
+      window.location.href = "/login";
+      return;
+    }
+    fetch(`http://localhost:8000/api/home/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
+        setBooks(books.filter((book) => book._id !== id));
+        console.log('Success:', books);
+      })
+      .catch((err) => {
+        console.log('Error:', err);
+      })
+
+  };
+
+  // api update
+  const updateBook = (id) => {
+    if (!auth) {
+      alert("Bạn cần đăng nhập để sửa sách");
+      window.location.href = "/login";
+      return;
+    }
+  };
+
+  // // xuat file excel
+  // const exportToExcel = () => {
+  //   const workbook = XLSX.utils.book_new();
+  //   const worksheet = XLSX.utils.json_to_sheet(books);
+  //   XLSX.utils.book_append_sheet(workbook, worksheet, 'Books');
+  //   XLSX.writeFile(workbook, 'books.xlsx');
+  // };
+
 
   return (
     <>
       <h1 className={style.title}>Trang chủ</h1>
-      <button className={` ${style.add} ui button`} onClick={handleForm} >
-        <i className="plus icon"  ></i>Thêm sách
-      </button>
-
+      <div className={style.header} >
+        <button className={` ${style.add} ui button`} onClick={handleForm} >
+          <i className="plus icon"  ></i>Thêm sách
+        </button>
+        <div className={style.filter}>
+          <Dropdown
+            text="Lọc sách"
+            options={[
+              { key: 1, text: "Không", value: "none" },
+              { key: 2, text: "Mới", value: "newType" },
+              { key: 3, text: "Cũ", value: "oldType" }
+            ]}
+            simple
+            item
+            onChange={(e, { value }) => setFilterType(value)}
+          />
+          <Dropdown
+            text="Thể loại"
+            options={[
+              { key: 1, text: "Không", value: "none" },
+              { key: 2, text: "Truyện tranh", value: "truyenTranh" },
+              { key: 3, text: "Khoa học", value: "khoaHoc" },
+              { key: 4, text: "Toán học", value: "toanHoc" },
+              { key: 5, text: "Văn học", value: "vanHoc" }
+            ]}
+            simple
+            item
+            onChange={(e, { value }) => setFilterGenre(value)}
+          />
+        </div>
+      </div>
       {showForm && (
         <Form>
           <Form.Field>
@@ -155,7 +199,7 @@ const Home = () => {
       <div className={style.books}>
         {books.map((book, index) => (
           <div className={style.book} key={index}>
-            <icon className={style.icon} >x</icon>
+            <icon className={style.icon} onClick={() => deleteBook(book._id)} >x</icon>
             <img src={book.image} alt={book.title} />
             <div>
               <h2>{book.title}</h2>
@@ -163,10 +207,11 @@ const Home = () => {
               <p><b>Mô tả: </b>{book.description}</p>
               <p><b>Thể loại: </b>{book.genre}</p>
             </div>
-            <div className={style.edit}>sửa</div>
+            <div className={style.edit} onClick={() => updateBook(book._id)} >sửa</div>
           </div>
         ))}
       </div>
+      <Button className={style.export} >Xuất dữ liệu</Button>
     </>
   );
 };

@@ -1,11 +1,32 @@
 const bookModel = require('../models/book');
 const genreModel = require('../models/genreBook');
-const TypeBook = require('../models/typeBook');
 const typeModel = require('../models/typeBook');
 
 module.exports.index = async (req, res) => {
-    const books = await bookModel.find();
-    res.json(books);
+    const filterType = req.query.type;
+    const filterGenre = req.query.genre;
+
+    if (filterType === 'none' && filterGenre === 'none') {
+        const books = await bookModel.find();
+        return res.json(books);
+    }
+
+    const type = await typeModel.find();
+    const genre = await genreModel.find();
+
+    if (filterType === 'none' && filterGenre !== 'none') {
+        const books = await bookModel.find({ _id: { $in: genre[0][filterGenre] } });
+        return res.json(books);
+    }
+    if (filterType !== 'none' && filterGenre === 'none') {
+        const books = await bookModel.find({ _id: { $in: type[0][filterType] } });
+        return res.json(books);
+    }
+    if (filterType !== 'none' && filterGenre !== 'none') {
+        const filterID = type[0][filterType].filter(value => genre[0][filterGenre].includes(value));
+        const books = await bookModel.find({ _id: { $in: filterID } });
+        return res.json(books);
+    }
 }
 
 module.exports.create = async (req, res) => {
@@ -68,50 +89,15 @@ module.exports.create = async (req, res) => {
         default:
             break;
     }
-    res.status(201).json({ message: "Book created successfully" });
+    res.json(saveBook);
 }
 
-// module.exports.delete = async (req, res) => {
-//     try {
-//         const bookId = req.params.id;
-//         const book = await bookModel.findById(bookId);
-//         if (!book) {
-//             res.status(404).json({ message: "Book not found" });
-//             return;
-//         }
-//         if (book.type === 'cũ') {
-//             await typeModel.updateOne({}, { $pull: { oldType: bookId } });
-//         } else {
-//             await typeModel.updateOne({}, { $pull: { newType: bookId } });
-//         }
-//         switch (book.genre) {
-//             case 'văn học':
-//                 await genreModel.updateOne({}, { $pull: { vanHoc: bookId } });
-//                 break;
-//             case 'khoa học':
-//                 await genreModel.updateOne({}, { $pull: { khoaHoc: bookId } });
-//                 break;
-//             case 'truyện tranh':
-//                 await genreModel.updateOne({}, { $pull: { truyenTranh: bookId } });
-//                 break;
-//             case 'toán học':
-//                 await genreModel.updateOne({}, { $pull: { toanHoc: bookId } });
-//                 break;
-//             default:
-//                 break;
-//         }
-//         await book.remove();
-//         res.status(200).json({ message: "Book deleted successfully" });
-//     } catch (error) {
-//         res.status(500).json({ message: error });
-//     }
-// }
-
 module.exports.delete = async (req, res) => {
+
     try {
         const bookId = req.params.id;
         const book = await bookModel.findById(bookId);
-        
+
         if (!book) {
             return res.status(404).json({ message: "Book not found" });
         }
@@ -138,15 +124,13 @@ module.exports.delete = async (req, res) => {
             default:
                 break;
         }
-
-        const result = await book.remove();
-
-        if (result) {
-            res.status(200).json({ message: "Book deleted successfully" });
-        } else {
-            res.status(500).json({ message: "Failed to delete book" });
-        }
+        await bookModel.deleteOne({ _id: bookId });
+        res.json({ message: "Delete success" });
     } catch (error) {
         res.status(500).json({ message: "Internal server error" });
     }
+}
+
+module.exports.update = async (req, res) => {
+    console.log(req.body);
 }
