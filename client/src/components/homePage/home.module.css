@@ -1,9 +1,9 @@
-.title{
+.title {
   margin-left: 25px;
 }
 
-.add{
-  margin-left: 30px !important; 
+.add {
+  margin-left: 30px !important;
   padding-left: 10px !important;
   padding-right: 10px !important;
 }
@@ -27,7 +27,7 @@
 }
 
 .book:hover {
-  transform: scale(1.03); 
+  transform: scale(1.03);
 }
 
 .book img {
@@ -39,12 +39,12 @@
   margin-top: 10px;
 }
 
-.book h2{
+.book h2 {
   margin-top: 10px;
   text-align: center;
 }
 
-.book h3{
+.book h3 {
   margin-top: -10px;
   text-align: center;
 }
@@ -60,13 +60,13 @@
   display: flex;
   right: 0px;
   padding: 2px;
-  margin: -3px 8px ;
+  margin: -3px 8px;
   font-size: large;
   font-weight: bold;
   cursor: pointer;
 }
 
-.edit{
+.edit {
   cursor: pointer;
   position: absolute;
   background-color: white;
@@ -81,7 +81,7 @@ form {
   margin: 25px;
 }
 
-.header{
+.header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -93,6 +93,17 @@ form {
   gap: 30px;
 }
 
-.export{
+.export {
   margin-left: 30px !important;
+}
+
+.formUpdate {
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.formUpdate form {
+  margin: auto;
+  width: 50%;
+  min-width: 400px;
 }

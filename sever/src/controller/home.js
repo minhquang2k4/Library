@@ -93,7 +93,6 @@ module.exports.create = async (req, res) => {
 }
 
 module.exports.delete = async (req, res) => {
-
     try {
         const bookId = req.params.id;
         const book = await bookModel.findById(bookId);
@@ -132,5 +131,69 @@ module.exports.delete = async (req, res) => {
 }
 
 module.exports.update = async (req, res) => {
-    console.log(req.body);
+    const id = req.params.id;
+    const title = req.body.title;
+    const author = req.body.author;
+    const image = req.body.image;
+    const description = req.body.description;
+    const genre = req.body.genre;
+    const type = req.body.type;
+
+    const book = await bookModel.findOne({ _id: id });
+    if (!book) {
+        return res.status(404).json({ message: "Book not found" });
+    }
+
+    if(book.genre !== genre){
+        switch (book.genre) {
+            case 'văn học':
+                await genreModel.updateOne({}, { $pull: { vanHoc: id } });
+                break;
+            case 'khoa học':
+                await genreModel.updateOne({}, { $pull: { khoaHoc: id } });
+                break;
+            case 'truyện tranh':
+                await genreModel.updateOne({}, { $pull: { truyenTranh: id } });
+                break;
+            case 'toán học':
+                await genreModel.updateOne({}, { $pull: { toanHoc: id } });
+                break;
+            default:
+                break;
+        }
+        switch (genre) {
+            case 'văn học':
+                await genreModel.updateOne({}, { $push: { vanHoc: id } });
+                break;
+            case 'khoa học':
+                await genreModel.updateOne({}, { $push: { khoaHoc: id } });
+                break;
+            case 'truyện tranh':
+                await genreModel.updateOne({}, { $push: { truyenTranh: id } });
+                break;
+            case 'toán học':
+                await genreModel.updateOne({}, { $push: { toanHoc: id } });
+                break;
+            default:
+                break;
+        }
+    }
+
+    if(book.type !== type){
+        if (type === 'cũ') {
+            await typeModel.updateOne({}, { $pull: { newType: id } });
+            await typeModel.updateOne({}, { $push: { oldType: id } });
+        } else {
+            await typeModel.updateOne({}, { $pull: { oldType: id } });
+            await typeModel.updateOne({}, { $push: { newType: id } });
+        }
+    }
+    book.title = title;
+    book.author = author;
+    book.image = image;
+    book.description = description;
+    book.genre = genre;
+    book.type = type;
+    book.save();
+    res.json(book);
 }

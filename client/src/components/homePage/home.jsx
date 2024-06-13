@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useContext } from "react";
 import { Form, Input, TextArea, Select, Button, Dropdown } from 'semantic-ui-react';
 // import XLSX from 'xlsx';
@@ -33,18 +34,19 @@ const Home = () => {
   }, [filterType, filterGenre]);
 
   const [showForm, setShowForm] = useState(false);
+
   const handleForm = () => {
     setShowForm(!showForm);
   };
 
-  // api add
+  const [bookID, setBookID] = useState('');
   const [bookName, setBookName] = useState('');
   const [author, setAuthor] = useState('');
   const [image, setImage] = useState('');
   const [description, setDescription] = useState('');
   const [bookType, setBookType] = useState('');
   const [genre, setGenre] = useState('');
-
+  // api add
   const addBook = async () => {
     if (!auth) {
       alert("Bạn cần đăng nhập để thêm sách");
@@ -115,21 +117,63 @@ const Home = () => {
   };
 
   // api update
-  const updateBook = (id) => {
+  const [showUpdate, setShowUpdate] = useState(false);
+
+  const handleUpdate = ({book}) => {
+    setShowUpdate(!showUpdate);
+    setBookID(book._id);
+    setBookName(book.title);
+    setAuthor(book.author);
+    setImage(book.image);
+    setDescription(book.description);
+    setBookType(book.type);
+    setGenre(book.genre);
+  }
+
+  const update = () => {
     if (!auth) {
       alert("Bạn cần đăng nhập để sửa sách");
       window.location.href = "/login";
       return;
     }
-  };
+    fetch(`http://localhost:8000/api/home/${bookID}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title: bookName,
+        author: author,
+        image: image,
+        description: description,
+        genre: genre,
+        type: bookType,
+      }),
+    })
+      .then((res) => {
+        if(!res.ok){
+          console.log("loi");
+        }
+        return res.json()
+      })
+      .then((updatedBook => {
+        setBooks(prevBooks => {
+          const newBooks = [...prevBooks];
+          const bookIndex = newBooks.findIndex(book => book._id === bookID);
+          newBooks[bookIndex] = updatedBook;
+          return newBooks;
+        });
+      }))
 
-  // // xuat file excel
-  // const exportToExcel = () => {
-  //   const workbook = XLSX.utils.book_new();
-  //   const worksheet = XLSX.utils.json_to_sheet(books);
-  //   XLSX.utils.book_append_sheet(workbook, worksheet, 'Books');
-  //   XLSX.writeFile(workbook, 'books.xlsx');
-  // };
+    setShowUpdate(!showUpdate);
+    setBookID('')
+    setBookName('');
+    setAuthor('');
+    setImage('');
+    setDescription('');
+    setBookType('');
+    setGenre('');
+  }
 
 
   return (
@@ -207,10 +251,41 @@ const Home = () => {
               <p><b>Mô tả: </b>{book.description}</p>
               <p><b>Thể loại: </b>{book.genre}</p>
             </div>
-            <div className={style.edit} onClick={() => updateBook(book._id)} >sửa</div>
+            <div className={style.edit} onClick={() => { handleUpdate({book}) } } >sửa</div>
           </div>
         ))}
       </div>
+      {showUpdate && (<div className={style.formUpdate}>
+        <h1 className={style.title}>Sửa sách</h1>
+        <Form>
+          <Form.Field>
+            <label>Tên sách</label>
+            <Input value={bookName} onChange={(e) => setBookName(e.target.value)} placeholder="Nhập tên sách" required />
+          </Form.Field>
+          <Form.Field>
+            <label>Tác giả</label>
+            <Input value={author} onChange={(e) => setAuthor(e.target.value)} placeholder="Nhập tác giả" required />
+          </Form.Field>
+          <Form.Field>
+            <label>Ảnh</label>
+            <Input value={image} onChange={(e) => setImage(e.target.value)} placeholder="Nhập link ảnh" required />
+          </Form.Field>
+          <Form.Field>
+            <label>Mô tả</label>
+            <TextArea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Nhập mô tả" required />
+          </Form.Field>
+          <Form.Field>
+            <label>Kiểu sách</label>
+            <Select value={bookType} onChange={(e, { value }) => setBookType(value)} placeholder="Chọn kiểu sách" options={optionsType} required />
+          </Form.Field>
+          <Form.Field>
+            <label>Thể loại</label>
+            <Select value={genre} onChange={(e, { value }) => setGenre(value)} placeholder="Chọn thể loại" options={optionsGenre} required />
+          </Form.Field>
+          <Button onClick={update}>Sửa</Button>
+        </Form>
+      </div>)}
+
       <Button className={style.export} >Xuất dữ liệu</Button>
     </>
   );
