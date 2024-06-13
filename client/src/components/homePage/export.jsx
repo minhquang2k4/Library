@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'semantic-ui-react';
 import * as XLSX from 'xlsx';
-
+import style from './home.module.css';
 
 const User = ({ books }) => {
     const listBook = books.map((book) => {
@@ -18,7 +18,7 @@ const User = ({ books }) => {
 
     return (
         <div>
-           <Button onClick={exportToExcel} >Xuất dữ liệu</Button>
+           <Button onClick={exportToExcel} className={style.export} >Xuất dữ liệu</Button>
         </div>
     );
 };

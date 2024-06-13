@@ -21,10 +21,10 @@ const Header = () => {
         <i className="huge book icon"></i>
         <Menu>
           <Menu.Item as={Link} to="/">
-            Home
+            Trang chủ
           </Menu.Item>
           <Menu.Item as={Link} to="/yourbooks">
-            Sách đã mượn
+            Sách của bạn
           </Menu.Item>
           <Menu.Item as={Link} to="/thongke">
             Thống kê

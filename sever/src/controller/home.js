@@ -144,7 +144,7 @@ module.exports.update = async (req, res) => {
         return res.status(404).json({ message: "Book not found" });
     }
 
-    if(book.genre !== genre){
+    if (book.genre !== genre) {
         switch (book.genre) {
             case 'văn học':
                 await genreModel.updateOne({}, { $pull: { vanHoc: id } });
@@ -179,7 +179,7 @@ module.exports.update = async (req, res) => {
         }
     }
 
-    if(book.type !== type){
+    if (book.type !== type) {
         if (type === 'cũ') {
             await typeModel.updateOne({}, { $pull: { newType: id } });
             await typeModel.updateOne({}, { $push: { oldType: id } });
@@ -196,4 +196,64 @@ module.exports.update = async (req, res) => {
     book.type = type;
     book.save();
     res.json(book);
+}
+
+module.exports.createMany = async (req, res) => {
+    if (await typeModel.find().count() === 0) {
+        const type = new typeModel({
+            cu: [],
+            moi: []
+        });
+        await type.save();
+    }
+
+    if (await genreModel.find().count() === 0) {
+        const genre = new genreModel({
+            vanHoc: [],
+            khoaHoc: [],
+            truyenTranh: [],
+            toanHoc: []
+        });
+        await genre.save();
+    }
+    books = req.body;
+
+    books.forEach(async book => {
+        const type = book.type;
+        const genre = book.genre;
+        const addBook = new bookModel({
+            title: book.title,
+            author: book.author,
+            image: book.image,
+            description: book.description,
+            genre: genre,
+            type: type,
+        });
+        const saveBook = await addBook.save();
+        const bookId = saveBook._id;
+
+        if (type === 'cũ') {
+            await typeModel.updateOne({}, { $push: { oldType: bookId } });
+        } else {
+            await typeModel.updateOne({}, { $push: { newType: bookId } });
+        }
+
+        switch (genre) {
+            case 'văn học':
+                await genreModel.updateOne({}, { $push: { vanHoc: bookId } });
+                break;
+            case 'khoa học':
+                await genreModel.updateOne({}, { $push: { khoaHoc: bookId } });
+                break;
+            case 'truyện tranh':
+                await genreModel.updateOne({}, { $push: { truyenTranh: bookId } });
+                break;
+            case 'toán học':
+                await genreModel.updateOne({}, { $push: { toanHoc: bookId } });
+                break;
+            default:
+                break;
+        }
+    });
+    res.json({ success: true });
 }

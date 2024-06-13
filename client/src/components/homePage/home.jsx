@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useContext } from "react";
 import { Form, Input, TextArea, Select, Button, Dropdown } from 'semantic-ui-react';
-// import XLSX from 'xlsx';
 import { authContext } from "../isLogin/isLogin.jsx";
 import style from "./home.module.css";
+import Export from "./export.jsx";
+import Import from "./import.jsx"
 
 const Home = () => {
   const optionsType = [
@@ -108,7 +109,6 @@ const Home = () => {
           throw new Error('Network response was not ok');
         }
         setBooks(books.filter((book) => book._id !== id));
-        console.log('Success:', books);
       })
       .catch((err) => {
         console.log('Error:', err);
@@ -119,7 +119,7 @@ const Home = () => {
   // api update
   const [showUpdate, setShowUpdate] = useState(false);
 
-  const handleUpdate = ({book}) => {
+  const handleUpdate = ({ book }) => {
     setShowUpdate(!showUpdate);
     setBookID(book._id);
     setBookName(book.title);
@@ -151,7 +151,7 @@ const Home = () => {
       }),
     })
       .then((res) => {
-        if(!res.ok){
+        if (!res.ok) {
           console.log("loi");
         }
         return res.json()
@@ -180,9 +180,12 @@ const Home = () => {
     <>
       <h1 className={style.title}>Trang chủ</h1>
       <div className={style.header} >
-        <button className={` ${style.add} ui button`} onClick={handleForm} >
-          <i className="plus icon"  ></i>Thêm sách
-        </button>
+        <div>
+          <button className={` ${style.add} ui button`} onClick={handleForm} >
+            <i className="plus icon"  ></i>Thêm sách
+          </button>
+          <Import />
+        </div>
         <div className={style.filter}>
           <Dropdown
             text="Lọc sách"
@@ -251,7 +254,7 @@ const Home = () => {
               <p><b>Mô tả: </b>{book.description}</p>
               <p><b>Thể loại: </b>{book.genre}</p>
             </div>
-            <div className={style.edit} onClick={() => { handleUpdate({book}) } } >sửa</div>
+            <div className={style.edit} onClick={() => { handleUpdate({ book }) }} >sửa</div>
           </div>
         ))}
       </div>
@@ -286,7 +289,7 @@ const Home = () => {
         </Form>
       </div>)}
 
-      <Button className={style.export} >Xuất dữ liệu</Button>
+      <Export books={books} className={style.export} />
     </>
   );
 };

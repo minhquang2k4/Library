@@ -97,6 +97,17 @@ form {
   margin-left: 30px !important;
 }
 
+.import{
+  margin-left: 30px !important;
+  padding-left: 17px !important;
+  padding-right: 17px !important;
+
+}
+
+.inputFile{
+  width: 200px !important;
+}
+
 .formUpdate {
   gap: 10px;
   margin-bottom: 30px;

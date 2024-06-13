@@ -10,6 +10,7 @@ router.post('/login', auth.login);
 router.delete('/api/home/:id', homeController.delete);
 router.put('/api/home/:id', homeController.update);
 
+router.post('/api/home/many', homeController.createMany);
 
 router.route('/api/home')
   .get(homeController.index)
