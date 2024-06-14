@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useContext } from "react";
-import { Form, Input, TextArea, Select, Button, Dropdown } from 'semantic-ui-react';
+import { Form, Input, TextArea, Select, Button, Dropdown, Card, Image } from 'semantic-ui-react';
 import { authContext } from "../isLogin/isLogin.jsx";
 import style from "./home.module.css";
 import Export from "./export.jsx";
@@ -187,7 +187,7 @@ const Home = () => {
       window.location.href = "/login";
       return;
     }
-    const token = getCookie('token'); 
+    const token = getCookie('token');
     fetch('http://localhost:8000/api/home/borrow', {
       method: 'POST',
       headers: {
@@ -198,27 +198,27 @@ const Home = () => {
         bookId: book._id,
       }),
     })
-    .then((res) => {
-      if (!res.ok) {
-        return res.json().then(err => { throw new Error(err.message); });
-      }
-      return res.json();
-    })
-    .then((data) => {
-      alert('Mượn sách thành công!');
-    })
-    .catch((err) => {
-      if (err.message === 'Book already borrowed') {
-        alert('Sách đã được mượn.');
-      } else {
-        alert('Có lỗi xảy ra: ' + err.message);
-      }
-      console.log('Error:', err);
-    });
+      .then((res) => {
+        if (!res.ok) {
+          return res.json().then(err => { throw new Error(err.message); });
+        }
+        return res.json();
+      })
+      .then((data) => {
+        alert('Mượn sách thành công!');
+      })
+      .catch((err) => {
+        if (err.message === 'Book already borrowed') {
+          alert('Sách đã được mượn.');
+        } else {
+          alert('Có lỗi xảy ra: ' + err.message);
+        }
+        console.log('Error:', err);
+      });
   }
 
   return (
-    <>
+    <div className={style.container}>
       <h1 className={style.title}>Trang chủ</h1>
       <div className={style.header} >
         <div className={style.flex}>
@@ -290,16 +290,18 @@ const Home = () => {
             <icon className={style.icon} onClick={() => deleteBook(book._id)} >x</icon>
             <img src={book.image} alt={book.title} />
             <div>
-              <h2>{book.title}</h2>
-              <h3>{book.author}</h3>
+              <h3>{book.title}</h3>
+              <p className={style.author} >{book.author}</p>
               <p><b>Mô tả: </b>{book.description}</p>
               <p className={style.padding}><b>Thể loại: </b>{book.genre}</p>
             </div>
-            <Button className={style.edit} onClick={() => { handleUpdate({ book }) }} >sửa</Button>
-            <Button className={style.borrow} onClick={() => { handleBorrow({ book }) }} >mượn</Button>
+            <hr />
+            <Button className={style.edit} color='blue' onClick={() => { handleUpdate({ book }) }} >sửa</Button>
+            <Button className={style.borrow} color='blue' onClick={() => { handleBorrow({ book }) }} >mượn</Button>
           </div>
         ))}
       </div>
+
       {showUpdate && (<div className={style.formUpdate}>
         <h1 className={style.title}>Sửa sách</h1>
         <Form>
@@ -332,7 +334,7 @@ const Home = () => {
       </div>)}
 
       <Export books={books} className={style.export} />
-    </>
+    </div>
   );
 };
 
