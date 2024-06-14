@@ -175,12 +175,53 @@ const Home = () => {
     setGenre('');
   }
 
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+
+  const handleBorrow = ({ book }) => {
+    if (!auth) {
+      alert("Bạn cần đăng nhập để mượn sách");
+      window.location.href = "/login";
+      return;
+    }
+    const token = getCookie('token'); 
+    fetch('http://localhost:8000/api/home/borrow', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': token,
+      },
+      body: JSON.stringify({
+        bookId: book._id,
+      }),
+    })
+    .then((res) => {
+      if (!res.ok) {
+        return res.json().then(err => { throw new Error(err.message); });
+      }
+      return res.json();
+    })
+    .then((data) => {
+      alert('Mượn sách thành công!');
+    })
+    .catch((err) => {
+      if (err.message === 'Book already borrowed') {
+        alert('Sách đã được mượn.');
+      } else {
+        alert('Có lỗi xảy ra: ' + err.message);
+      }
+      console.log('Error:', err);
+    });
+  }
 
   return (
     <>
       <h1 className={style.title}>Trang chủ</h1>
       <div className={style.header} >
-        <div>
+        <div className={style.flex}>
           <button className={` ${style.add} ui button`} onClick={handleForm} >
             <i className="plus icon"  ></i>Thêm sách
           </button>
@@ -252,9 +293,10 @@ const Home = () => {
               <h2>{book.title}</h2>
               <h3>{book.author}</h3>
               <p><b>Mô tả: </b>{book.description}</p>
-              <p><b>Thể loại: </b>{book.genre}</p>
+              <p className={style.padding}><b>Thể loại: </b>{book.genre}</p>
             </div>
-            <div className={style.edit} onClick={() => { handleUpdate({ book }) }} >sửa</div>
+            <Button className={style.edit} onClick={() => { handleUpdate({ book }) }} >sửa</Button>
+            <Button className={style.borrow} onClick={() => { handleBorrow({ book }) }} >mượn</Button>
           </div>
         ))}
       </div>

@@ -2,10 +2,17 @@
   margin-left: 25px;
 }
 
+.flex{
+  display: flex;
+  justify-content: space-between;
+
+}
+
 .add {
   margin-left: 30px !important;
   padding-left: 10px !important;
   padding-right: 10px !important;
+  height: 36px !important;
 }
 
 .books {
@@ -54,6 +61,10 @@
   text-align: justify;
 }
 
+.book .padding {
+  padding-bottom: 30px;
+}
+
 
 .icon {
   position: absolute;
@@ -67,17 +78,24 @@
 }
 
 .edit {
-  cursor: pointer;
   position: absolute;
-  background-color: white;
-  margin: 5px;
+  margin: 5px !important;
   border: 1px solid #ccc;
-  padding: 3px;
   border-radius: 3px;
+  bottom: 0px;
+}
+
+
+.borrow{
+  position: absolute;
+  margin: 5px !important;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  bottom: 0px;
+  right: 0px;
 }
 
 form {
-
   margin: 25px;
 }
 
@@ -106,6 +124,7 @@ form {
 
 .inputFile{
   width: 200px !important;
+  margin-right: 10px;
 }
 
 .formUpdate {
@@ -118,3 +137,4 @@ form {
   width: 50%;
   min-width: 400px;
 }
+

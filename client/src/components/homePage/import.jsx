@@ -7,6 +7,7 @@ import { authContext } from "../isLogin/isLogin.jsx";
 
 const Import = () => {
     const [list, setList] = useState([]);
+    const [showForm, setShowForm] = useState(false);
     const [auth] = useContext(authContext);
 
     const handleImport = async (e) => {
@@ -19,7 +20,7 @@ const Import = () => {
             const worksheet = workbook.worksheets[0];
             const dataParse = [];
             worksheet.eachRow((row, rowNumber) => {
-                if (rowNumber > 1) { 
+                if (rowNumber > 1) {
                     const rowData = {
                         title: row.getCell(1).value,
                         author: row.getCell(2).value,
@@ -62,8 +63,14 @@ const Import = () => {
 
     return (
         <div>
-            <Button className={style.import} onClick={handle}>thêm nhiều</Button>
-            <Input type='file' className={style.inputFile} onChange={handleImport} />
+            <Button className={style.import} onClick={() => { setShowForm(!showForm) }}>thêm nhiều</Button>
+            {showForm && (
+                <div>
+                    <br />
+                    <Input type='file' className={style.inputFile} onChange={handleImport} />
+                    <Button onClick={handle}>Thêm</Button>
+                </div>
+            )}
         </div>
     );
 };

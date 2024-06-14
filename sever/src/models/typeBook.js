@@ -5,13 +5,13 @@ const typeBookSchema = new schema({
     newType: {
         type: [{
             type: schema.Types.ObjectId,
-            ref: "Type"
+            ref: "book"
         }]
     },
     oldType: {
         type: [{
             type: schema.Types.ObjectId,
-            ref: "Type"
+            ref: "book"
         }]
     }
 });

@@ -1,24 +1,33 @@
-import React from 'react';
-import { Button } from 'semantic-ui-react';
-import * as XLSX from 'xlsx';
+import React, { useState, useEffect } from 'react';
+import { Form, Input, TextArea, Select, Button, Dropdown } from 'semantic-ui-react';
+import style from './user.module.css';
 
 
-const User = ({ books }) => {
-    const listBook = books.map((book) => {
-        const { _id, __v, ...rest } = book;
-        return rest;
-    });
+const User = () => {
+    const [userBooks, setUserBooks] = useState([]);
+    const [showForm, setShowForm] = useState(true);
+    useEffect(() => {
 
-    const exportToExcel = () => {
-        const worksheet = XLSX.utils.json_to_sheet(listBook);
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
-        XLSX.writeFile(workbook, 'books.xlsx');
-    };
+    }, []);
+
 
     return (
-        <div>
-           <Button onClick={exportToExcel} >Xuất dữ liệu</Button>
+        <div className={style.container}>
+            <h1>Your Books</h1>
+            <Button onClick={() => setShowForm(!showForm)}>Mượn sách</Button>
+            {showForm && (
+                <Form>
+                    <Form.Field>
+                        <label>Chọn sách</label>
+                        <Dropdown
+                            placeholder='Chọn sách'
+                            fluid
+                            selection
+                            options={userBooks}
+                        />
+                    </Form.Field>
+                </Form>
+            )}
         </div>
     );
 };

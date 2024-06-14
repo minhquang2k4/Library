@@ -8,11 +8,9 @@ const Header = () => {
   
   const handleLogout = () => {
     localStorage.removeItem("username");
-    document.cookie =
-      "token" + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
     localStorage.setItem("auth", false);
     window.location.href = "/login";
-
   };
 
   return (

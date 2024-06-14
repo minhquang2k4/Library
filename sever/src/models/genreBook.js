@@ -5,25 +5,25 @@ const genreSchema = new schema({
     khoaHoc: {
         type: [{
             type: schema.Types.ObjectId,
-            ref: "Type"
+            ref: "book"
         }]
     }, 
     toanHoc: {
         type: [{
             type: schema.Types.ObjectId,
-            ref: "Type"
+            ref: "book"
         }]
     },
     vanHoc: {
         type: [{
             type: schema.Types.ObjectId,
-            ref: "Type"
+            ref: "book"
         }]
     },
     truyenTranh: {
         type: [{
             type: schema.Types.ObjectId,
-            ref: "Type"
+            ref: "book"
         }]
     },
 });
