@@ -18,14 +18,30 @@ const bookSchema = new schema({
         type: String,
         required: true
     },
-    genre : {
+    genreId: {
+        type: schema.Types.ObjectId,
+        required: true
+    },
+    genreCode: {
         type: String,
         required: true
     },
-    type: {
+    genreName: {
         type: String,
         required: true
-    }
+    },
+    typeId: {
+        type: schema.Types.ObjectId,
+        required: true
+    },
+    typeCode: {
+        type: String,
+        required: true
+    },
+    typeName: {
+        type: String,
+        required: true
+    },
 });
 
 

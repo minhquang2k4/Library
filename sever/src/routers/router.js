@@ -13,4 +13,6 @@ router.use('/api/user', require('./userRouter.js'));
 
 router.get('/api/statistics', statisticsController.index);
 
+router.use('/api/manager', require('./managerRouter.js'));
+
 module.exports = router;

@@ -27,6 +27,9 @@ const Header = () => {
           <Menu.Item as={Link} to="/statistics">
             Thống kê
           </Menu.Item>
+          <Menu.Item as={Link} to="/manager">
+            Quản lý
+          </Menu.Item>
         </Menu>
         <Menu compact>
           {username ? (

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useContext } from "react";
-import { Form, Input, TextArea, Select, Button, Dropdown, Grid, GridRow, GridColumn } from 'semantic-ui-react';
+import { Form, Input, TextArea, Select, Button, Dropdown } from 'semantic-ui-react';
 
 import { authContext } from "../isLogin/isLogin.jsx";
 import style from "./home.module.css";
@@ -257,23 +257,18 @@ const Home = () => {
       </div>
       {showForm && (
         <Form>
-          <Grid columns='equal'>
-          <GridRow>
-            <GridColumn>
-              <Form.Field>
-                <label>Tên sách</label>
-                <Input value={bookName} onChange={(e) => setBookName(e.target.value)} placeholder="Nhập tên sách" required />
-              </Form.Field>
-            </GridColumn>
-            <GridColumn>
-              <Form.Field>
-                <label>Tác giả</label>
-                <Input value={author} onChange={(e) => setAuthor(e.target.value)} placeholder="Nhập tác giả" required />
-              </Form.Field>
-            </GridColumn>
-          </GridRow>
-          </Grid>
-
+          <Form.Field>
+            <label>Tên sách</label>
+            <Input value={bookName} onChange={(e) => setBookName(e.target.value)} placeholder="Nhập tên sách" required />
+          </Form.Field>
+          <Form.Field>
+            <label>Tác giả</label>
+            <Input value={author} onChange={(e) => setAuthor(e.target.value)} placeholder="Nhập tác giả" required />
+          </Form.Field>
+          <Form.Field>
+            <label>Ảnh</label>
+            <Input value={image} onChange={(e) => setImage(e.target.value)} placeholder="Nhập link ảnh" required />
+          </Form.Field>
           <Form.Field>
             <label>Ảnh</label>
             <Input value={image} onChange={(e) => setImage(e.target.value)} placeholder="Nhập link ảnh" required />

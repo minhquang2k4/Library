@@ -2,17 +2,13 @@ const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 
 const typeBookSchema = new schema({
-    newType: {
-        type: [{
-            type: schema.Types.ObjectId,
-            ref: "book"
-        }]
+    typeCode: {
+        type: String,
+        required: true
     },
-    oldType: {
-        type: [{
-            type: schema.Types.ObjectId,
-            ref: "book"
-        }]
+    typeName: {
+        type: String,
+        required: true
     }
 });
 

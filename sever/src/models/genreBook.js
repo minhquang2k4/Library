@@ -2,30 +2,14 @@ const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 
 const genreSchema = new schema({
-    khoaHoc: {
-        type: [{
-            type: schema.Types.ObjectId,
-            ref: "book"
-        }]
-    }, 
-    toanHoc: {
-        type: [{
-            type: schema.Types.ObjectId,
-            ref: "book"
-        }]
+    genreCode: {
+        type: String,
+        required: true
     },
-    vanHoc: {
-        type: [{
-            type: schema.Types.ObjectId,
-            ref: "book"
-        }]
-    },
-    truyenTranh: {
-        type: [{
-            type: schema.Types.ObjectId,
-            ref: "book"
-        }]
-    },
+    genreName: {
+        type: String,
+        required: true
+    }
 });
 
 const Genre = mongoose.model("Genre", genreSchema);
