@@ -232,14 +232,14 @@ module.exports.createMany = async (req, res) => {
             await genre.save();
         }
         books = req.body;
-
+        
         books.forEach(async book => {
             const type = book.type;
             const genre = book.genre;
             const addBook = new bookModel({
                 title: book.title,
                 author: book.author,
-                image: book.image,
+                image: book.image.toString(),
                 description: book.description,
                 genre: genre,
                 type: type,
@@ -278,7 +278,6 @@ module.exports.createMany = async (req, res) => {
     res.json({ success: true });
 }
 
-
 module.exports.borrow = async (req, res) => {
     try {
         const token = req.headers.authorization;
@@ -299,7 +298,7 @@ module.exports.borrow = async (req, res) => {
                 books: [{ bookId: bookId }]
             });
         } else {
-            const bookAlreadyBorrowed = user.books.some(book => book.bookId.equals(bookId));
+            const bookAlreadyBorrowed = user.books.some(book => book.bookId.equals(bookId) && book.end === null);
             if (bookAlreadyBorrowed) {
                 return res.status(400).json({ message: 'Book already borrowed' });
             } else {

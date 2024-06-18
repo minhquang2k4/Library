@@ -5,7 +5,7 @@ import { Dropdown, Menu } from "semantic-ui-react";
 
 const Header = () => {
   const username = localStorage.getItem("username");
-  
+
   const handleLogout = () => {
     localStorage.removeItem("username");
     document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
@@ -24,7 +24,7 @@ const Header = () => {
           <Menu.Item as={Link} to="/yourbooks">
             Sách của bạn
           </Menu.Item>
-          <Menu.Item as={Link} to="/thongke">
+          <Menu.Item as={Link} to="/statistics">
             Thống kê
           </Menu.Item>
         </Menu>

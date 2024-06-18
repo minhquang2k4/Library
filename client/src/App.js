@@ -6,6 +6,7 @@ import Home from "./components/homePage/home.jsx";
 import User from './components/userPage/user.jsx';
 import Login from './components/auth/login.jsx';
 import Register from './components/auth/register.jsx';
+import Statistics from './components/statisticsPage/statistics.jsx';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/yourbooks' element={<User />} />
+        <Route path='/statistics' element={<Statistics />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
       </Routes>

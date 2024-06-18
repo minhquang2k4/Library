@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Button, Dropdown } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import style from './user.module.css';
+import { authContext } from '../isLogin/isLogin.jsx';
 
 const User = () => {
     const [userBooks, setUserBooks] = useState([]);
     const [filterType, setFilterType] = useState('none');
     const [filterGenre, setFilterGenre] = useState('none');
+    const [auth] = useContext(authContext);
 
     function getCookie(name) {
         const value = `; ${document.cookie}`;
@@ -15,6 +17,11 @@ const User = () => {
     }
 
     useEffect(() => {
+        if (!auth) {
+            alert('Bạn chưa đăng nhập');
+            window.location.href = '/login';
+            return;
+        }
         fetch(`http://localhost:8000/api/user/books?type=${filterType}&genre=${filterGenre}`, {
             method: 'GET',
             headers: {

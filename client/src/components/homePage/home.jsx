@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useContext } from "react";
-import { Form, Input, TextArea, Select, Button, Dropdown, Card, Image } from 'semantic-ui-react';
+import { Form, Input, TextArea, Select, Button, Dropdown, Grid, GridRow, GridColumn } from 'semantic-ui-react';
+
 import { authContext } from "../isLogin/isLogin.jsx";
 import style from "./home.module.css";
 import Export from "./export.jsx";
@@ -231,7 +232,7 @@ const Home = () => {
           <Dropdown
             text="Lọc sách"
             options={[
-              { key: 1, text: "Không", value: "none" },
+              { key: 1, text: "Tất cả", value: "none" },
               { key: 2, text: "Mới", value: "newType" },
               { key: 3, text: "Cũ", value: "oldType" }
             ]}
@@ -242,7 +243,7 @@ const Home = () => {
           <Dropdown
             text="Thể loại"
             options={[
-              { key: 1, text: "Không", value: "none" },
+              { key: 1, text: "Tất cả", value: "none" },
               { key: 2, text: "Truyện tranh", value: "truyenTranh" },
               { key: 3, text: "Khoa học", value: "khoaHoc" },
               { key: 4, text: "Toán học", value: "toanHoc" },
@@ -256,14 +257,23 @@ const Home = () => {
       </div>
       {showForm && (
         <Form>
-          <Form.Field>
-            <label>Tên sách</label>
-            <Input value={bookName} onChange={(e) => setBookName(e.target.value)} placeholder="Nhập tên sách" required />
-          </Form.Field>
-          <Form.Field>
-            <label>Tác giả</label>
-            <Input value={author} onChange={(e) => setAuthor(e.target.value)} placeholder="Nhập tác giả" required />
-          </Form.Field>
+          <Grid columns='equal'>
+          <GridRow>
+            <GridColumn>
+              <Form.Field>
+                <label>Tên sách</label>
+                <Input value={bookName} onChange={(e) => setBookName(e.target.value)} placeholder="Nhập tên sách" required />
+              </Form.Field>
+            </GridColumn>
+            <GridColumn>
+              <Form.Field>
+                <label>Tác giả</label>
+                <Input value={author} onChange={(e) => setAuthor(e.target.value)} placeholder="Nhập tác giả" required />
+              </Form.Field>
+            </GridColumn>
+          </GridRow>
+          </Grid>
+
           <Form.Field>
             <label>Ảnh</label>
             <Input value={image} onChange={(e) => setImage(e.target.value)} placeholder="Nhập link ảnh" required />
