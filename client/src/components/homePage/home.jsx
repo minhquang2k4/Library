@@ -6,21 +6,18 @@ import { authContext } from "../isLogin/isLogin.jsx";
 import style from "./home.module.css";
 import Export from "./export.jsx";
 import Import from "./import.jsx"
+import ModalAdd from "./modalAdd.jsx";
 
 const Home = () => {
-  const optionsType = [
-    { key: '1', text: 'mới', value: 'mới' },
-    { key: '2', text: 'cũ', value: 'cũ' },
-  ]
-
-  const optionsGenre = [
-    { key: '1', text: 'truyện tranh', value: 'truyện tranh' },
-    { key: '2', text: 'khoa học', value: 'khoa học' },
-    { key: '1', text: 'toán học', value: 'toán học' },
-    { key: '2', text: 'văn học', value: 'văn học' },
-  ]
-
   const [auth] = useContext(authContext);
+
+  var optionsType;
+  const optionsGenre = [
+    { text: 'truyện tranh', value: 'truyện tranh' },
+    { text: 'khoa học', value: 'khoa học' },
+    { text: 'toán học', value: 'toán học' },
+    { text: 'văn học', value: 'văn học' },
+  ]
 
   // api get
   const [books, setBooks] = useState([]);
@@ -28,12 +25,31 @@ const Home = () => {
   const [filterGenre, setFilterGenre] = useState('none');
 
   useEffect(() => {
+
+    fetch('http://localhost:8000/api/home/type')
+      .then((res) => res.json())
+      .then((data) => {
+        const updatedOptionsType = data.map(item => ({
+          key: item._id,
+          text: item.typeName,
+          value: item.typeName,
+        }));
+        optionsType = updatedOptionsType;
+        console.log(optionsType);
+      });
+
+    fetch('http://localhost:8000/api/home/genre')
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
+
     fetch(`http://localhost:8000/api/home?type=${filterType}&genre=${filterGenre}`)
       .then((res) => res.json())
       .then((data) => {
         setBooks(data);
       });
-  }, [filterType, filterGenre]);
+  }, [,]);
 
   const [showForm, setShowForm] = useState(false);
 
@@ -223,6 +239,7 @@ const Home = () => {
       <h1 className={style.title}>Trang chủ</h1>
       <div className={style.header} >
         <div className={style.flex}>
+          <ModalAdd />
           <button className={` ${style.add} ui button`} onClick={handleForm} >
             <i className="plus icon"  ></i>Thêm sách
           </button>

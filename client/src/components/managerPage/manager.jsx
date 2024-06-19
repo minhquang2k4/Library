@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Grid, GridRow, GridColumn } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 
@@ -7,8 +7,6 @@ import ModalGenre from './modalGenre.jsx';
 import style from './manager.module.css';
 
 const Manager = () => {
-    const [open, setOpen] = useState(false);
-
     return (
         <div className={style.container} >
             <Grid divided>

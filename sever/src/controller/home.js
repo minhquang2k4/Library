@@ -37,66 +37,31 @@ module.exports.index = async (req, res) => {
 
 module.exports.create = async (req, res) => {
     try {
-        if (await typeModel.find().count() === 0) {
-            const type = new typeModel({
-                cu: [],
-                moi: []
-            });
-            await type.save();
-        }
-
-        if (await genreModel.find().count() === 0) {
-            const genre = new genreModel({
-                vanHoc: [],
-                khoaHoc: [],
-                truyenTranh: [],
-                toanHoc: []
-            });
-            await genre.save();
-        }
-
         const title = req.body.title;
         const author = req.body.author;
         const image = req.body.image;
         const description = req.body.description;
-        const genre = req.body.genre;
-        const type = req.body.type;
+        const genre = req.body.genreName;
+        const type = req.body.typeName;
+
+        const typeBook = await typeModel.findOne({ typeName: type });
+        const genreBook = await genreModel.findOne({ genreName: genre });
 
         const book = new bookModel({
             title: title,
             author: author,
             image: image,
             description: description,
-            genre: genre,
-            type: type,
+            genreId: genreBook._id,
+            genreCode: genreBook.genreCode,
+            genreName: genreBook.genreName,
+            typeId: typeBook._id,
+            typeCode: typeBook.typeCode,
+            typeName: typeBook.typeName,
         });
-
         const saveBook = await book.save();
-        const bookId = saveBook._id;
+        res.json({message: "Create success"})
 
-        if (type === 'cũ') {
-            await typeModel.updateOne({}, { $push: { oldType: bookId } });
-        } else {
-            await typeModel.updateOne({}, { $push: { newType: bookId } });
-        }
-
-        switch (genre) {
-            case 'văn học':
-                await genreModel.updateOne({}, { $push: { vanHoc: bookId } });
-                break;
-            case 'khoa học':
-                await genreModel.updateOne({}, { $push: { khoaHoc: bookId } });
-                break;
-            case 'truyện tranh':
-                await genreModel.updateOne({}, { $push: { truyenTranh: bookId } });
-                break;
-            case 'toán học':
-                await genreModel.updateOne({}, { $push: { toanHoc: bookId } });
-                break;
-            default:
-                break;
-        }
-        res.json(saveBook);
     } catch (error) {
         res.status(500).json({ message: "Internal server error" })
     }
@@ -232,7 +197,7 @@ module.exports.createMany = async (req, res) => {
             await genre.save();
         }
         books = req.body;
-        
+
         books.forEach(async book => {
             const type = book.type;
             const genre = book.genre;
@@ -313,3 +278,21 @@ module.exports.borrow = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error' });
     }
 };
+
+module.exports.getType = async (req, res) => {
+    try {
+        const type = await typeModel.find();
+        res.json(type);
+    } catch (error) {
+        res.status(500).json({ message: "Internal server error" });
+    }
+}
+
+module.exports.getGenre = async (req, res) => {
+    try {
+        const genre = await genreModel.find();
+        res.json(genre);
+    } catch (error) {
+        res.status(500).json({ message: "Internal server error" });
+    }
+}

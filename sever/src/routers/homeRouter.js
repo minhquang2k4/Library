@@ -13,4 +13,7 @@ router.route('/')
   .get(homeController.index)
   .post(homeController.create);
 
+router.get('/type', homeController.getType);
+router.get('/genre', homeController.getGenre);
+
 module.exports = router;
